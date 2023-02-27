@@ -1,5 +1,7 @@
 import { Application, Sprite, Texture } from 'pixi.js'
 import { TilingSprite } from 'pixi.js';
+import { Obstacle } from './Obstacle';
+import { Player } from './Player';
 import { Scene } from './Scene';
 
 const app = new Application({
@@ -25,13 +27,23 @@ middle_trees.tileScale.set(3.7,4.5)
 front_trees.tileScale.set(2,4.5)
 ground.tileScale.set(1,1.5)
 ground.position.set(-15,580)
-const sceny: Scene = new Scene(app.screen.width, app.screen.height);
+// const sceny: Scene = new Scene(app.screen.width, app.screen.height);
 
-app.stage.addChild(sceny);
+
+// app.stage.addChild(sceny);
 app.stage.addChild(back_trees);
 app.stage.addChild(middle_trees);
 app.stage.addChild(front_trees);
 app.stage.addChild(ground);
+
+const playerTexture = Texture.from('../assets/bird.png')
+
+const player = new Player(app, playerTexture);
+console.log("index")
+console.log(player.hitArea)
+
+const obstacle = new Obstacle(app, player);
+
 
 app.ticker.add((delta) => {
 	x = (x + speed)
@@ -39,4 +51,8 @@ app.ticker.add((delta) => {
 	ground.tilePosition.x = - x
 	middle_trees.tilePosition.x =  - x / 2 
 	back_trees.tilePosition.x =  - x / 3
+
+	
+	
 })
+
