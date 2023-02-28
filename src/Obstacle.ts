@@ -1,4 +1,4 @@
-import { Application, ICanvas, Loader, Rectangle, Sprite } from "pixi.js";
+import { Application, ICanvas, Loader, Rectangle, Sprite, Text } from "pixi.js";
 import {  } from 'pixi.js/'
 import { Player } from "./Player";
 import { Star } from "./Star";
@@ -6,7 +6,7 @@ import { Star } from "./Star";
 export class Obstacle extends Sprite {
 
     obstacles: Array<Sprite> = [];
-    velocity = 5;
+    velocity = 10;
     interval = 1;
     player: Player;
     star: Star;
@@ -35,7 +35,7 @@ export class Obstacle extends Sprite {
     
     update(app: Application<ICanvas>){
         app.ticker.add(() => {
-            if (this.interval % 155 === 0) {
+            if (this.interval % 50 === 0) {
                 // console.log(Math.round(this.interval))
                 this.addObstacle(app);
             }
@@ -44,10 +44,17 @@ export class Obstacle extends Sprite {
                 obstacle.position.x += - this.velocity;
 
                 if(this.player.getBounds().intersects(obstacle.getBounds()) || this.star.getBounds().intersects(obstacle.getBounds())){
-                    console.log("Erorrrrrr")
+                    const gameOverText = new Text('Game Over', { fontFamily: 'Arial', fontSize: 70, fill: 0xFFFFFF })
+                    gameOverText.x = 450;
+                    gameOverText.y = 300;
+
+                    this.player.end = true
+
+                    app.stage.addChild(gameOverText)
                     // console.log(this.player.getBounds())
                     app.stage.removeChild(this.star);
-                    app.ticker.stop();
+                    // app.ticker.stop();
+
                 }
 
                 if(obstacle.position.x < -obstacle.width){

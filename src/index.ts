@@ -15,7 +15,7 @@ const app = new Application({
 });
 
 let x = 0;
-let speed = 2;
+let speed = 8;
 
 let back_trees = new TilingSprite(Texture.from('../assets/forrest/back-trees1.png'), app.screen.width, app.screen.height)
 let middle_trees = new TilingSprite(Texture.from('../assets/forrest/middle-trees.png'), app.screen.width, app.screen.height)

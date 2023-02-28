@@ -4,7 +4,7 @@ import { Player } from "./Player";
 export class Star extends Sprite {
 
     stars: Array<Sprite> = [];
-    velocity = 5;
+    velocity = 10;
     interval = 1;
     player: Player;
     score = 0;
@@ -38,7 +38,7 @@ export class Star extends Sprite {
 
     update(app: Application<ICanvas>){
         app.ticker.add(() => {
-            if (this.interval % 115 === 0) {
+            if (this.interval % 60 === 0) {
                 // console.log(Math.round(this.interval))
                 this.addStar(app);
             }

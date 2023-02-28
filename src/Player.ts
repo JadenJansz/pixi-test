@@ -1,4 +1,4 @@
-import { Application, Graphics, ICanvas, Rectangle, RENDERER_TYPE, Resource, Sprite, Texture } from "pixi.js";
+import { Application, Graphics, ICanvas, Rectangle, Resource, Sprite, Texture } from "pixi.js";
 
 export class Player extends Sprite {
 
@@ -7,20 +7,23 @@ export class Player extends Sprite {
     vy: number;
     jumpVelocity = -5;
     start = false;
+    end = false;
+    rotationSpeed = 0.1;
 
     constructor(app: Application<ICanvas>, texture: Texture<Resource>) {
         super(texture);
 
         const player = Sprite.from('../assets/bird.png')
-        this.position.set(10, 300)
+        this.position.set(70, 300)
         this.scale.x = 0.15
         this.scale.y = 0.15
+        this.anchor.set(0.5)
         this.interactive = true;
         // this.hitArea = new Rectangle(0.5, 0.5 ,0.5 ,0.5);
         this.vx = 0;
         this.vy = 0;
 
-        const worldBounds = new Rectangle(0, 0, 1250, 560)
+        const worldBounds = new Rectangle(0, 50, 1250,550)
         this.addGravity(app, this, worldBounds)
         this.jump(this)
         
@@ -37,6 +40,20 @@ export class Player extends Sprite {
                 player.x += player.vx * delta;
                 player.y += player.vy * delta;
 
+            }
+
+            if(this.end){
+                player.vy = 5;
+                player.rotation += this.rotationSpeed
+                // console.log(player.y + player.height)
+
+                if(!worldBounds.contains(player.x, player.y)){
+                    this.start = false
+                    player.y -= 2
+                    app.ticker.stop()
+                    console.log("lol")
+                    // this.rotationSpeed = -this.rotationSpeed
+                }
             }
 
             if (!worldBounds.contains(player.x, player.y)) {
