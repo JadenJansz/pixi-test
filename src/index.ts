@@ -3,6 +3,7 @@ import { TilingSprite } from 'pixi.js';
 import { Obstacle } from './Obstacle';
 import { Player } from './Player';
 import { Scene } from './Scene';
+import { Star } from './Star';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -14,7 +15,7 @@ const app = new Application({
 });
 
 let x = 0;
-let speed = 1;
+let speed = 2;
 
 let back_trees = new TilingSprite(Texture.from('../assets/forrest/back-trees1.png'), app.screen.width, app.screen.height)
 let middle_trees = new TilingSprite(Texture.from('../assets/forrest/middle-trees.png'), app.screen.width, app.screen.height)
@@ -39,10 +40,13 @@ app.stage.addChild(ground);
 const playerTexture = Texture.from('../assets/bird.png')
 
 const player = new Player(app, playerTexture);
-console.log("index")
-console.log(player.hitArea)
 
-const obstacle = new Obstacle(app, player);
+console.log(player.getBounds())
+
+const star = new Star(app, player)
+
+const obstacle = new Obstacle(app, player, star);
+
 
 
 app.ticker.add((delta) => {
@@ -55,4 +59,3 @@ app.ticker.add((delta) => {
 	
 	
 })
-

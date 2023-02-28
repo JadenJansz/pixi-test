@@ -1,19 +1,24 @@
-import { Application, ICanvas, Rectangle, Sprite } from "pixi.js";
+import { Application, ICanvas, Loader, Rectangle, Sprite } from "pixi.js";
+import {  } from 'pixi.js/'
 import { Player } from "./Player";
+import { Star } from "./Star";
 
 export class Obstacle extends Sprite {
 
     obstacles: Array<Sprite> = [];
-    velocity = 2;
+    velocity = 5;
     interval = 1;
     player: Player;
+    star: Star;
 
-    constructor(app: Application<ICanvas>, player: Player) {
+    constructor(app: Application<ICanvas>, player: Player, star: Star) {
         super();
-        // this.update(app);
+
         this.player = player
-        console.log(this.player)
+        this.star = star
         this.update(app)
+        
+        // const loader = new Loader();
     }
     
     
@@ -21,12 +26,12 @@ export class Obstacle extends Sprite {
         const obstacle = Sprite.from('../assets/bomb.png');
         obstacle.position.set(1500, Math.random() * (550 - 64) + 32)
         obstacle.interactive = true;
-        obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, 100, 100);
+        obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, obstacle.width, obstacle.height);
         // obstacle.x -= -5;
         
         app.stage.addChild(obstacle);
         this.obstacles.push(obstacle);
-    }
+    }  
     
     update(app: Application<ICanvas>){
         app.ticker.add(() => {
@@ -37,13 +42,12 @@ export class Obstacle extends Sprite {
             
             this.obstacles.forEach((obstacle) => {
                 obstacle.position.x += - this.velocity;
-                // console.log(this.player.getBounds().y)
 
-                // if (obstacle.hitArea && this.player.hitArea && obstacle.hitArea.contains(this.player.position.x, this.player.position.y)) {
-                //     console.log('Game over!');
-                // }
-                if(!this.rectsIntersect(this.player, obstacle)){
+                if(this.player.getBounds().intersects(obstacle.getBounds()) || this.star.getBounds().intersects(obstacle.getBounds())){
                     console.log("Erorrrrrr")
+                    // console.log(this.player.getBounds())
+                    app.stage.removeChild(this.star);
+                    app.ticker.stop();
                 }
 
                 if(obstacle.position.x < -obstacle.width){
@@ -55,26 +59,22 @@ export class Obstacle extends Sprite {
         })
     }
 
+    addScore(){ 
+
+    }
+
     
     rectsIntersect(a: Sprite, b: Sprite){
 	
-        let playerBox = a.hitArea;
-        let obstacleBox = b.hitArea;
+        let playerBox = a.getBounds();
+        let obstacleBox = b.getBounds();
 
-        const tempA = new Sprite();
-        tempA.hitArea = playerBox;
-        const bounds1 = tempA.getBounds();
-
-        const tempB = new Sprite();
-        tempB.hitArea = obstacleBox;
-        const bounds2 = tempB.getBounds();
+        // console.log(playerBox)
     
-        // console.log(obstacleBox)
-    
-        return bounds1.x + bounds1.width > bounds2.x &&
-                bounds1.x < bounds2.x + bounds2.width &&
-                bounds1.y + bounds1.height > bounds2.y &&
-                bounds1.y < bounds2.y + bounds2.height
+        return playerBox.x + playerBox.width > obstacleBox.x &&
+                playerBox.x < obstacleBox.x + obstacleBox.width &&
+                playerBox.y + playerBox.height > obstacleBox.y &&
+                playerBox.y < obstacleBox.y + obstacleBox.height
     }
 
 }
