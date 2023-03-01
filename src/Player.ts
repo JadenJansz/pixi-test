@@ -23,11 +23,10 @@ export class Player extends Sprite {
         this.vx = 0;
         this.vy = 0;
 
-        const worldBounds = new Rectangle(0, 50, 1250,550)
+        const worldBounds = new Rectangle(0, 50, 1250,520)
         this.addGravity(app, this, worldBounds)
         this.jump(this)
         
-
         app.stage.addChild(this)
     }
     
@@ -35,6 +34,7 @@ export class Player extends Sprite {
         app.ticker.add((delta) => {
 
             if(this.start){
+                app.ticker.start()
                 player.vy += this.gravity*delta
                 
                 player.x += player.vx * delta;

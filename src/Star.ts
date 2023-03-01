@@ -1,10 +1,11 @@
 import { Application, Text, ICanvas, Rectangle, Sprite } from "pixi.js";
 import { Player } from "./Player";
+import { TweenMax, Power0 } from 'gsap'
 
 export class Star extends Sprite {
 
     stars: Array<Sprite> = [];
-    velocity = 10;
+    velocity = 8;
     interval = 1;
     player: Player;
     score = 0;
@@ -20,17 +21,25 @@ export class Star extends Sprite {
         this.scoreLabel.y = 10;
     
         app.stage.addChild(this.scoreLabel)
-    }
 
+    }
+    
     addStar(app: Application<ICanvas>){
         const star = Sprite.from('../assets/star.png')
         star.position.set(1500, Math.random() * (550 - 64) + 32)
-        // star.scale.x = 0.2
-        // star.scale.y = 0.2
+        star.scale.x = 0.7
+        star.scale.y = 0.7
         star.interactive = true;
         star.hitArea = new Rectangle(1,1, 1, 1);
         // star.x -= -5;
-
+        
+        TweenMax.to(star.scale, 1, {
+            x: 1,
+            y: 1, 
+            ease: Power0.easeNone,
+            repeat: -1,
+            yoyo: true
+        })
         
         app.stage.addChild(star);
         this.stars.push(star);
@@ -61,8 +70,6 @@ export class Star extends Sprite {
                 if(this.player.getBounds().intersects(star.getBounds())){
                     this.score += 10;
                     this.scoreLabel.text = `Score: ${this.score}`;
-                    console.log(this.player.getBounds())
-                    console.log(star.getBounds())
                     app.stage.removeChild(star);
                     this.stars.splice(this.stars.indexOf(star), 1)
 

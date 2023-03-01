@@ -1,12 +1,12 @@
-import { Application, ICanvas, Loader, Rectangle, Sprite, Text } from "pixi.js";
-import {  } from 'pixi.js/'
+import { Application, ICanvas, Rectangle, Sprite, Text, TextStyle } from "pixi.js";
+import { Loader } from "pixi.js";
 import { Player } from "./Player";
 import { Star } from "./Star";
 
 export class Obstacle extends Sprite {
 
     obstacles: Array<Sprite> = [];
-    velocity = 10;
+    velocity = 8;
     interval = 1;
     player: Player;
     star: Star;
@@ -24,7 +24,7 @@ export class Obstacle extends Sprite {
     
     addObstacle(app: Application<ICanvas>){
         const obstacle = Sprite.from('../assets/bomb.png');
-        obstacle.position.set(1500, Math.random() * (550 - 64) + 32)
+        obstacle.position.set(1500, Math.random() * (500 - 100) + 100)
         obstacle.interactive = true;
         obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, obstacle.width, obstacle.height);
         // obstacle.x -= -5;
@@ -35,7 +35,7 @@ export class Obstacle extends Sprite {
     
     update(app: Application<ICanvas>){
         app.ticker.add(() => {
-            if (this.interval % 50 === 0) {
+            if (this.interval % 80 === 0) {
                 // console.log(Math.round(this.interval))
                 this.addObstacle(app);
             }
@@ -44,9 +44,14 @@ export class Obstacle extends Sprite {
                 obstacle.position.x += - this.velocity;
 
                 if(this.player.getBounds().intersects(obstacle.getBounds()) || this.star.getBounds().intersects(obstacle.getBounds())){
-                    const gameOverText = new Text('Game Over', { fontFamily: 'Arial', fontSize: 70, fill: 0xFFFFFF })
-                    gameOverText.x = 450;
-                    gameOverText.y = 300;
+                    const gameOverText = new Text('Game Over')
+                    
+                    gameOverText.style = new TextStyle({
+                        fontFamily: 'CustomFont', fontSize: 70, fill: 0xFFFFFF 
+                    })
+                    gameOverText.x = 400;
+                    gameOverText.y = 280;
+
 
                     this.player.end = true
 
