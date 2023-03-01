@@ -24,12 +24,12 @@ export class Obstacle extends Sprite {
     
     addObstacle(app: Application<ICanvas>){
         const obstacle = Sprite.from('../assets/bomb.png');
-        obstacle.position.set(1500, Math.random() * (500 - 100) + 100)
+        obstacle.position.set(1500, Math.random() * (600 - 200) + 200)
         obstacle.interactive = true;
         obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, obstacle.width, obstacle.height);
         // obstacle.x -= -5;
         
-        app.stage.addChild(obstacle);
+        app.stage.addChildAt(obstacle, 5);
         this.obstacles.push(obstacle);
     }  
     
@@ -43,21 +43,21 @@ export class Obstacle extends Sprite {
             this.obstacles.forEach((obstacle) => {
                 obstacle.position.x += - this.velocity;
 
-                if(this.player.getBounds().intersects(obstacle.getBounds()) || this.star.getBounds().intersects(obstacle.getBounds())){
-                    const gameOverText = new Text('Game Over')
+                if(this.player.getBounds().intersects(obstacle.getBounds()) ||   this.star.getBounds().intersects(obstacle.getBounds())){
+                    const gameOverText = new Text('Game Over !!')
                     
                     gameOverText.style = new TextStyle({
-                        fontFamily: 'CustomFont', fontSize: 70, fill: 0xFFFFFF 
+                        fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF 
                     })
-                    gameOverText.x = 400;
-                    gameOverText.y = 280;
+                    gameOverText.x = 800;
+                    gameOverText.y = 400;
 
 
                     this.player.end = true
 
                     app.stage.addChild(gameOverText)
                     // console.log(this.player.getBounds())
-                    app.stage.removeChild(this.star);
+                    app.stage.removeChild(obstacle);
                     // app.ticker.stop();
 
                 }

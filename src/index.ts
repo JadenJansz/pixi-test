@@ -6,14 +6,25 @@ import { Player } from './Player';
 import { Scene } from './Scene';
 import { Star } from './Star';
 
+const maxWidth = 1250;
+const maxHeight = 700;
+
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
 	resolution: window.devicePixelRatio || 1,
 	autoDensity: true,
 	backgroundColor: 0x6495ed,
-	width: 1150,
-	height: 650
+	width: window.innerWidth,
+	height: window.innerHeight
 });
+
+window.addEventListener('resize', () => {
+	const width = window.innerWidth;
+  const height = window.innerHeight;
+  const ratio = Math.min(width / app.renderer.width, height / app.renderer.height);
+  app.view.style!.width = `${app.renderer.width * ratio}px`;
+  app.view.style!.height = `${app.renderer.height * ratio}px`;
+  });
 
 let x = 0;
 let speed = 5;
@@ -24,12 +35,19 @@ let front_trees = new TilingSprite(Texture.from('../assets/forrest/front-trees.p
 let ground = new TilingSprite(Texture.from('../assets/forrest/ground.png'), 1300, 150)
 
 let frame = Sprite.from('../assets/frame.png');
+frame.scale.set(1.75)
 
 back_trees.tileScale.set(3.5,5)
-middle_trees.tileScale.set(3.7,4.5)
-front_trees.tileScale.set(2,4.5)
+back_trees.position.set(100, 160)
+
+middle_trees.tileScale.set(3.7,4)
+middle_trees.position.set(100, 160)
+
+front_trees.tileScale.set(2,3.7)
+front_trees.position.set(100,170)
+
 ground.tileScale.set(1,1.5)
-ground.position.set(-15,550)
+ground.position.set(300,670)
 // const sceny: Scene = new Scene(app.screen.width, app.screen.height);
 
 
@@ -38,7 +56,6 @@ app.stage.addChild(back_trees);
 app.stage.addChild(middle_trees);
 app.stage.addChild(front_trees);
 app.stage.addChild(ground);
-// app.stage.addChild(frame);
 
 const playerTexture = Texture.from('../assets/bird.png')
 
@@ -46,14 +63,15 @@ const player = new Player(app, playerTexture);
 
 let start = true
 
-const startText = new Text('Jungle - Pixi')
+const startText = new Text('Pixi - Bird')
 startText.style = new TextStyle({
 	fontFamily: 'CustomFont', fontSize: 70, fill: 0xFFFFFF 
 })
-startText.x = 400;
-startText.y = 280;
+startText.x = 800;
+startText.y = 400;
 app.stage.addChild(startText)
 
+app.stage.addChild(frame);
 // const explosion = new Explosion(app);
 
 app.ticker.add((delta) => {
@@ -71,8 +89,8 @@ app.ticker.add((delta) => {
 				if(!start){
 					console.log("lol")
 					const star = new Star(app, player)
-					
 					const obstacle = new Obstacle(app, player, star);
+					
 					app.stage.removeChild(startText)
 				}
 			}
