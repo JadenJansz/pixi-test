@@ -68,7 +68,7 @@ export class Star extends Sprite {
                     
                 }
                 
-                if(this.player.getBounds().intersects(star.getBounds())){
+                if(this.player.bounds.getBounds().intersects(star.getBounds())){
                     this.score += 10;
                     this.scoreLabel.text = `Score: ${this.score}`;
                     app.stage.removeChild(star);

@@ -21,7 +21,7 @@ export class Obstacle extends Sprite {
         this.star = star
         this.update(app)
         
-        // const loader = new Loader();
+        console.log(player.getBounds())
     }
     
     
@@ -47,8 +47,9 @@ export class Obstacle extends Sprite {
             this.obstacles.forEach((obstacle) => {
                 obstacle.position.x += - this.velocity;
 
-                console.log(this.player)
-                if(this.player.getBounds().intersects(obstacle.getBounds()) ||   this.star.getBounds().intersects(obstacle.getBounds())){
+                // console.log(this.player.getBounds())
+                if(this.player.bounds.getBounds().intersects(obstacle.getBounds()) ||   this.star.getBounds().intersects(obstacle.getBounds())){
+                    // app.stage.removeChild(this.player);
                     const gameOverText = new Text('Game Over !!')
                     
                     gameOverText.style = new TextStyle({
@@ -63,7 +64,7 @@ export class Obstacle extends Sprite {
                     if(!this.animation){
                         this.animation = true
                         const explosion = new Explosion(app, obstacle.x, obstacle.y)
-
+                        explosion.playerDead(this.player.bounds.x, this.player.bounds.y); 
                         setTimeout(() => {
                             app.ticker.stop();
                         }, 1500)

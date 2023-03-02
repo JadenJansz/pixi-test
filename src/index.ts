@@ -18,6 +18,8 @@ const app = new Application({
 	height: window.innerHeight
 });
 
+console.log(window.innerWidth, window.innerHeight)
+
 window.addEventListener('resize', () => {
 	const width = window.innerWidth;
 	const height = window.innerHeight;
@@ -63,7 +65,7 @@ front_trees.position.set(100,130)
 // ground.tileScale.set(1,1.5)
 ground.tileScale.x = isMac ? 1 : 1
 ground.tileScale.y = isMac ? 1.5 : 1.5
-ground.position.set(300, isMac ? 630 : 470)
+ground.position.set(300, isMac ? 630 : 490)
 // const sceny: Scene = new Scene(app.screen.width, app.screen.height);
 
 

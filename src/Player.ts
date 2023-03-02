@@ -10,11 +10,12 @@ export class Player extends Container {
     start = false;
     end = false;
     rotationSpeed = 0.1;
+    bounds: AnimatedSprite
 
     constructor(app: Application<ICanvas>, texture: AnimatedSprite) {
         super();
 
-        const player = Sprite.from('../assets/bird1.png')
+        // let player = Sprite.from('../assets/bird1.png')
         texture.position.set(isMac ? 490 : 380, isMac ? 450 : 350)
         texture.scale.x = 0.15
         texture.scale.y = 0.15
@@ -24,11 +25,7 @@ export class Player extends Container {
         this.vx = 0;
         this.vy = 0;
 
-        const worldBounds = new Rectangle(0, isMac ? 190 : 160, 1250, isMac ? 470 : 340)
-        
-        app.stage.addChild(this)
-        
-        
+        const worldBounds = new Rectangle(0, isMac ? 190 : 160, 1250, isMac ? 470 : 360)
         
         app.stage.addChild(texture);
         texture.play();
@@ -37,6 +34,8 @@ export class Player extends Container {
 
         this.addGravity(app, texture, worldBounds)
         this.jump(texture)
+        this.bounds = texture
+        console.log(texture.getBounds());
     }
     
     addGravity(app: Application<ICanvas>, player: AnimatedSprite, worldBounds: Rectangle){
@@ -56,6 +55,7 @@ export class Player extends Container {
                 player.rotation += this.rotationSpeed
                 // console.log(player.y + player.height)
 
+                app.stage.removeChild(player)
                 if(!worldBounds.contains(player.x, player.y)){
                     this.start = false
                     player.y -= 2
