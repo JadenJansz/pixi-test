@@ -1,5 +1,7 @@
 import { Application, ICanvas, Rectangle, Sprite, Text, TextStyle } from "pixi.js";
 import { Loader } from "pixi.js";
+import { isMac } from ".";
+import { Explosion } from "./Explosion";
 import { Player } from "./Player";
 import { Star } from "./Star";
 
@@ -10,6 +12,7 @@ export class Obstacle extends Sprite {
     interval = 1;
     player: Player;
     star: Star;
+    animation = false
 
     constructor(app: Application<ICanvas>, player: Player, star: Star) {
         super();
@@ -24,7 +27,9 @@ export class Obstacle extends Sprite {
     
     addObstacle(app: Application<ICanvas>){
         const obstacle = Sprite.from('../assets/bomb.png');
-        obstacle.position.set(1500, Math.random() * (600 - 200) + 200)
+        obstacle.position.set(1500, Math.random() * ((isMac ? 600 : 440 )- (isMac ? 200 : 150)) + (isMac ? 200 : 150))
+        obstacle.scale.x = 0.7
+        obstacle.scale.y = 0.7
         obstacle.interactive = true;
         obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, obstacle.width, obstacle.height);
         // obstacle.x -= -5;
@@ -39,21 +44,30 @@ export class Obstacle extends Sprite {
                 // console.log(Math.round(this.interval))
                 this.addObstacle(app);
             }
-            
             this.obstacles.forEach((obstacle) => {
                 obstacle.position.x += - this.velocity;
 
+                console.log(this.player)
                 if(this.player.getBounds().intersects(obstacle.getBounds()) ||   this.star.getBounds().intersects(obstacle.getBounds())){
                     const gameOverText = new Text('Game Over !!')
                     
                     gameOverText.style = new TextStyle({
                         fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF 
                     })
-                    gameOverText.x = 800;
-                    gameOverText.y = 400;
+                    gameOverText.x = isMac ? 800 : 600;
+                    gameOverText.y = isMac ? 400 : 300;
 
 
                     this.player.end = true
+
+                    if(!this.animation){
+                        this.animation = true
+                        const explosion = new Explosion(app, obstacle.x, obstacle.y)
+
+                        setTimeout(() => {
+                            app.ticker.stop();
+                        }, 1500)
+                    }
 
                     app.stage.addChild(gameOverText)
                     // console.log(this.player.getBounds())

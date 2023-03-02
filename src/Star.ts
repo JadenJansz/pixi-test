@@ -1,6 +1,7 @@
 import { Application, Text, ICanvas, Rectangle, Sprite } from "pixi.js";
 import { Player } from "./Player";
 import { TweenMax, Power0 } from 'gsap'
+import { isMac } from ".";
 
 export class Star extends Sprite {
 
@@ -17,8 +18,8 @@ export class Star extends Sprite {
         this.update(app)
 
         this.scoreLabel = new Text('Score : 00', { fontFamily: 'CustomFont', fontSize: 35, fill: 0xFFFFFF })
-        this.scoreLabel.x = 430;
-        this.scoreLabel.y = 190;
+        this.scoreLabel.x = isMac ? 430 : 350;
+        this.scoreLabel.y = isMac ? 190 : 140;
     
         app.stage.addChild(this.scoreLabel)
 
@@ -26,16 +27,16 @@ export class Star extends Sprite {
     
     addStar(app: Application<ICanvas>){
         const star = Sprite.from('../assets/star.png')
-        star.position.set(1500, Math.random() * (600 - 200) + 200)
-        star.scale.x = 0.7
-        star.scale.y = 0.7
+        star.position.set(1500, Math.random() * ((isMac ? 600 : 440 )- (isMac ? 200 : 150)) + (isMac ? 200 : 150))
+        star.scale.x = 0.6
+        star.scale.y = 0.6
         star.interactive = true;
         star.hitArea = new Rectangle(1,1, 1, 1);
         // star.x -= -5;
         
         TweenMax.to(star.scale, 1, {
-            x: 1,
-            y: 1, 
+            x: 0.9,
+            y: 0.9, 
             ease: Power0.easeNone,
             repeat: -1,
             yoyo: true

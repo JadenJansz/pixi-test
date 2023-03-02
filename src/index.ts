@@ -1,4 +1,4 @@
-import { Application, Sprite, Texture, Text, TextStyle } from 'pixi.js'
+import { Application, Sprite, Texture, Text, TextStyle, AnimatedSprite } from 'pixi.js'
 import { TilingSprite } from 'pixi.js';
 import { Explosion } from './Explosion';
 import { Obstacle } from './Obstacle';
@@ -20,11 +20,19 @@ const app = new Application({
 
 window.addEventListener('resize', () => {
 	const width = window.innerWidth;
-  const height = window.innerHeight;
-  const ratio = Math.min(width / app.renderer.width, height / app.renderer.height);
-  app.view.style!.width = `${app.renderer.width * ratio}px`;
-  app.view.style!.height = `${app.renderer.height * ratio}px`;
-  });
+	const height = window.innerHeight;
+	const ratio = Math.min(width / app.renderer.width, height / app.renderer.height);
+	app.view.style!.width = `${app.renderer.width * ratio}px`;
+	app.view.style!.height = `${app.renderer.height * ratio}px`;
+});
+
+export const isMac = navigator.userAgent.indexOf('Mac OS X') !== -1;
+
+if (isMac) {
+  console.log("MAC")
+} else {
+	console.log("Windows")
+}
 
 let x = 0;
 let speed = 5;
@@ -35,19 +43,27 @@ let front_trees = new TilingSprite(Texture.from('../assets/forrest/front-trees.p
 let ground = new TilingSprite(Texture.from('../assets/forrest/ground.png'), 1300, 150)
 
 let frame = Sprite.from('../assets/frame.png');
-frame.scale.set(1.75)
+// frame.scale.set(1.24)
+frame.width = window.innerWidth
+frame.height = window.innerHeight
 
-back_trees.tileScale.set(3.5,5)
-back_trees.position.set(100, 160)
+back_trees.tileScale.x = isMac ? 3.5 : 2.7 
+back_trees.tileScale.y = isMac ? 5 : 3.5
+back_trees.position.set(100, 130)
 
-middle_trees.tileScale.set(3.7,4)
-middle_trees.position.set(100, 160)
+middle_trees.tileScale.x = isMac ? 3.7 : 3 
+middle_trees.tileScale.y = isMac ? 4 : 3
+middle_trees.position.set(100, 130)
 
-front_trees.tileScale.set(2,3.7)
-front_trees.position.set(100,170)
+// front_trees.tileScale.set(2,2.7)
+front_trees.tileScale.x = isMac ? 2 : 2 
+front_trees.tileScale.y = isMac ? 3.7 : 2.7
+front_trees.position.set(100,130)
 
-ground.tileScale.set(1,1.5)
-ground.position.set(300,670)
+// ground.tileScale.set(1,1.5)
+ground.tileScale.x = isMac ? 1 : 1
+ground.tileScale.y = isMac ? 1.5 : 1.5
+ground.position.set(300, isMac ? 630 : 470)
 // const sceny: Scene = new Scene(app.screen.width, app.screen.height);
 
 
@@ -57,9 +73,12 @@ app.stage.addChild(middle_trees);
 app.stage.addChild(front_trees);
 app.stage.addChild(ground);
 
-const playerTexture = Texture.from('../assets/bird.png')
+const playerTexture = AnimatedSprite.from('../assets/bird1.png')
 
-const player = new Player(app, playerTexture);
+const birdFrames = ["assets/bird/step1.png", "assets/bird/step2.png", "assets/bird/step3.png", "assets/bird/step4.png"];
+const animation = new AnimatedSprite(birdFrames.map((bird) =>  Texture.from(bird) ))
+
+const player = new Player(app, animation);
 
 let start = true
 
@@ -67,8 +86,8 @@ const startText = new Text('Pixi - Bird')
 startText.style = new TextStyle({
 	fontFamily: 'CustomFont', fontSize: 70, fill: 0xFFFFFF 
 })
-startText.x = 800;
-startText.y = 400;
+startText.x = isMac ? 800 : 600;
+startText.y = isMac ? 400 : 300;
 app.stage.addChild(startText)
 
 app.stage.addChild(frame);
