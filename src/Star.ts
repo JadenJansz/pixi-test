@@ -18,8 +18,8 @@ export class Star extends Sprite {
         this.update(app)
 
         this.scoreLabel = new Text('Score : 00', { fontFamily: 'CustomFont', fontSize: 35, fill: 0xFFFFFF })
-        this.scoreLabel.x = isMac ? 430 : 350;
-        this.scoreLabel.y = isMac ? 190 : 140;
+        this.scoreLabel.x = isMac ? 320 : 350;
+        this.scoreLabel.y = isMac ? 140 : 140;
     
         app.stage.addChild(this.scoreLabel)
 
@@ -27,7 +27,7 @@ export class Star extends Sprite {
     
     addStar(app: Application<ICanvas>){
         const star = Sprite.from('../assets/star.png')
-        star.position.set(1500, Math.random() * ((isMac ? 600 : 440 )- (isMac ? 200 : 150)) + (isMac ? 200 : 150))
+        star.position.set(1100, Math.random() * ((isMac ? 450 : 440 )- (isMac ? 140 : 150)) + (isMac ? 140 : 150))
         star.scale.x = 0.6
         star.scale.y = 0.6
         star.interactive = true;

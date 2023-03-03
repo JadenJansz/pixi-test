@@ -1,9 +1,11 @@
-import { AnimatedSprite, Application, Container, ICanvas, Texture } from "pixi.js";
+import { AnimatedSprite, Application, Container, ICanvas, Texture, Text, TextStyle, Rectangle } from "pixi.js";
 import { TweenMax, Power0 } from 'gsap'
+import { isMac } from ".";
 
 export class Explosion extends Container {
 
     app;
+    rotationSpeed = 0.1;
     
     constructor(app: Application<ICanvas>, x: number | undefined, y: number | undefined){
         super();
@@ -47,6 +49,25 @@ export class Explosion extends Container {
         animation.play();
         animation.loop = false
         animation.animationSpeed = 0.07
+
+        animation.rotation += this.rotationSpeed
+                // console.log(player.y + player.height)
+        const worldBounds = new Rectangle(0, isMac ? 190 : 160, 1250, isMac ? 470 : 360)
+        if(!worldBounds.contains(animation.x, animation.y)){
+            // this.start = false
+            animation.y -= 2
+            
+            const restartText = new Text('Press Space to restart')
+            
+            restartText.style = new TextStyle({
+                fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF 
+            })
+            restartText.x = isMac ? 830 : 620;
+            restartText.y = isMac ? 480 : 380;
+            // this.app.stage.addChild(restartText)
+            // app.ticker.stop()
+            // this.restart();
+        }
     }
     
     onClampyFrameChange(currentFrame: any): void {

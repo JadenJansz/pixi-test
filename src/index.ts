@@ -13,7 +13,7 @@ const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
 	resolution: window.devicePixelRatio || 1,
 	autoDensity: true,
-	backgroundColor: 0x6495ed,
+	backgroundColor: '#4775ff',
 	width: window.innerWidth,
 	height: window.innerHeight
 });
@@ -39,33 +39,33 @@ if (isMac) {
 let x = 0;
 let speed = 5;
 
-let back_trees = new TilingSprite(Texture.from('../assets/forrest/back-trees1.png'), app.screen.width, app.screen.height)
-let middle_trees = new TilingSprite(Texture.from('../assets/forrest/middle-trees.png'), app.screen.width, app.screen.height)
-let front_trees = new TilingSprite(Texture.from('../assets/forrest/front-trees.png'), app.screen.width, app.screen.height)
-let ground = new TilingSprite(Texture.from('../assets/forrest/ground.png'), 1300, 150)
+let back_trees = new TilingSprite(Texture.from('../assets/forrest/back-trees1.png'), 1300, 500)
+let middle_trees = new TilingSprite(Texture.from('../assets/forrest/middle-trees.png'), 1300, 500)
+let front_trees = new TilingSprite(Texture.from('../assets/forrest/front-trees.png'), 1300, 500)
+let ground = new TilingSprite(Texture.from('../assets/forrest/ground.png'), 1000, 150)
 
 let frame = Sprite.from('../assets/frame.png');
-// frame.scale.set(1.24)
-frame.width = window.innerWidth
-frame.height = window.innerHeight
+frame.scale.set(1.28)
+// frame.width = window.innerWidth
+// frame.height = window.innerHeight
 
 back_trees.tileScale.x = isMac ? 3.5 : 2.7 
-back_trees.tileScale.y = isMac ? 5 : 3.5
-back_trees.position.set(100, 130)
+back_trees.tileScale.y = isMac ? 3.5 : 3.5
+back_trees.position.set(100, 120)
 
-middle_trees.tileScale.x = isMac ? 3.7 : 3 
-middle_trees.tileScale.y = isMac ? 4 : 3
-middle_trees.position.set(100, 130)
+middle_trees.tileScale.x = isMac ? 3.5 : 3 
+middle_trees.tileScale.y = isMac ? 3.3 : 3
+middle_trees.position.set(100, 120)
 
 // front_trees.tileScale.set(2,2.7)
 front_trees.tileScale.x = isMac ? 2 : 2 
-front_trees.tileScale.y = isMac ? 3.7 : 2.7
-front_trees.position.set(100,130)
+front_trees.tileScale.y = isMac ? 2.7 : 2.7
+front_trees.position.set(100,120)
 
 // ground.tileScale.set(1,1.5)
 ground.tileScale.x = isMac ? 1 : 1
 ground.tileScale.y = isMac ? 1.5 : 1.5
-ground.position.set(300, isMac ? 630 : 490)
+ground.position.set(300, isMac ? 470 : 490)
 // const sceny: Scene = new Scene(app.screen.width, app.screen.height);
 
 
@@ -88,8 +88,8 @@ const startText = new Text('Pixi - Bird')
 startText.style = new TextStyle({
 	fontFamily: 'CustomFont', fontSize: 70, fill: 0xFFFFFF 
 })
-startText.x = isMac ? 800 : 600;
-startText.y = isMac ? 400 : 300;
+startText.x = isMac ? 600 : 600;
+startText.y = isMac ? 300 : 300;
 app.stage.addChild(startText)
 
 app.stage.addChild(frame);
@@ -105,10 +105,8 @@ app.ticker.add((delta) => {
 	document.addEventListener("keydown", (event) => {
 		if(event.code === 'Space'){
 			if(start){
-				console.log("lil")
 				start = false
 				if(!start){
-					console.log("lol")
 					const star = new Star(app, player)
 					const obstacle = new Obstacle(app, player, star);
 					

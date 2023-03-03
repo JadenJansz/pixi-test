@@ -16,7 +16,7 @@ export class Player extends Container {
         super();
 
         // let player = Sprite.from('../assets/bird1.png')
-        texture.position.set(isMac ? 490 : 380, isMac ? 450 : 350)
+        texture.position.set(isMac ? 380 : 380, isMac ? 330 : 350)
         texture.scale.x = 0.15
         texture.scale.y = 0.15
         texture.anchor.set(0.5)
@@ -25,11 +25,12 @@ export class Player extends Container {
         this.vx = 0;
         this.vy = 0;
 
-        const worldBounds = new Rectangle(0, isMac ? 190 : 160, 1250, isMac ? 470 : 360)
+        const worldBounds = new Rectangle(0, isMac ? 150 : 160, 1250, isMac ? 350 : 360)
         
         app.stage.addChild(texture);
-        texture.play();
-        texture.loop = true;
+        this.playFrames(texture, ["assets/bird/step1.png", "assets/bird/step2.png", "assets/bird/step3.png", "assets/bird/step4.png"], 1000, true)
+
+        // texture.loop = true;
         texture.animationSpeed = 0.1;
 
         this.addGravity(app, texture, worldBounds)
@@ -55,7 +56,7 @@ export class Player extends Container {
                 player.rotation += this.rotationSpeed
                 // console.log(player.y + player.height)
 
-                app.stage.removeChild(player)
+                this.playFrames(player, ["assets/bird/step5.png", "assets/bird/step6.png"], 1000, false)
                 if(!worldBounds.contains(player.x, player.y)){
                     this.start = false
                     player.y -= 2
@@ -65,8 +66,8 @@ export class Player extends Container {
                     restartText.style = new TextStyle({
                         fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF 
                     })
-                    restartText.x = isMac ? 830 : 620;
-                    restartText.y = isMac ? 480 : 380;
+                    restartText.x = isMac ? 560 : 620;
+                    restartText.y = isMac ? 370 : 380;
                     app.stage.addChild(restartText)
                     // app.ticker.stop()
                     this.restart();
@@ -88,9 +89,12 @@ export class Player extends Container {
                 gameOverText.style = new TextStyle({
                     fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF 
                 })
-                gameOverText.x = isMac ? 800 : 600;
-                gameOverText.y = isMac ? 400 : 300;
+                gameOverText.x = isMac ? 550 : 600;
+                gameOverText.y = isMac ? 300 : 300;
                 app.stage.addChild(gameOverText)
+                setTimeout(() => {
+                    app.ticker.stop();
+                }, 100)
             }
         })
     }
@@ -111,5 +115,13 @@ export class Player extends Container {
                 location.reload();
             }
         })
+    }
+
+    playFrames(sprite: AnimatedSprite,frames: any[], duration: number, loop: boolean) {
+        sprite.stop();
+        sprite.textures = frames.map(frame => Texture.from(frame));
+        sprite.animationSpeed = -1 / duration;
+        sprite.loop = loop;
+        sprite.play();
     }
 }

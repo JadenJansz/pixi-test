@@ -27,7 +27,7 @@ export class Obstacle extends Sprite {
     
     addObstacle(app: Application<ICanvas>){
         const obstacle = Sprite.from('../assets/bomb.png');
-        obstacle.position.set(1500, Math.random() * ((isMac ? 600 : 440 )- (isMac ? 200 : 150)) + (isMac ? 200 : 150))
+        obstacle.position.set(1100, Math.random() * ((isMac ? 450 : 440 )- (isMac ? 140 : 150)) + (isMac ? 140 : 150))
         obstacle.scale.x = 0.7
         obstacle.scale.y = 0.7
         obstacle.interactive = true;
@@ -55,8 +55,8 @@ export class Obstacle extends Sprite {
                     gameOverText.style = new TextStyle({
                         fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF 
                     })
-                    gameOverText.x = isMac ? 800 : 600;
-                    gameOverText.y = isMac ? 400 : 300;
+                    gameOverText.x = isMac ? 550 : 600;
+                    gameOverText.y = isMac ? 300 : 300;
 
 
                     this.player.end = true
@@ -64,7 +64,7 @@ export class Obstacle extends Sprite {
                     if(!this.animation){
                         this.animation = true
                         const explosion = new Explosion(app, obstacle.x, obstacle.y)
-                        explosion.playerDead(this.player.bounds.x, this.player.bounds.y); 
+                        // explosion.playerDead(this.player.bounds.x, this.player.bounds.y); 
                         setTimeout(() => {
                             app.ticker.stop();
                         }, 1500)
