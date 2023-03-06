@@ -52,7 +52,7 @@ export class Explosion extends Container {
 
         animation.rotation += this.rotationSpeed
                 // console.log(player.y + player.height)
-        const worldBounds = new Rectangle(0, isMac ? 190 : 160, 1250, isMac ? 470 : 360)
+        const worldBounds = new Rectangle(0, 160, 1250, 360)
         if(!worldBounds.contains(animation.x, animation.y)){
             // this.start = false
             animation.y -= 2
@@ -62,8 +62,8 @@ export class Explosion extends Container {
             restartText.style = new TextStyle({
                 fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF 
             })
-            restartText.x = isMac ? 830 : 620;
-            restartText.y = isMac ? 480 : 380;
+            restartText.x = 620;
+            restartText.y = 380;
             // this.app.stage.addChild(restartText)
             // app.ticker.stop()
             // this.restart();

@@ -1,4 +1,6 @@
-import { Application, Sprite, Texture, Text, TextStyle, AnimatedSprite } from 'pixi.js'
+import { Sound } from '@pixi/sound';
+import { Power0, TweenMax } from 'gsap';
+import { Application, Sprite, Texture, Text, TextStyle, AnimatedSprite, Loader, Assets } from 'pixi.js'
 import { TilingSprite } from 'pixi.js';
 import { Explosion } from './Explosion';
 import { Obstacle } from './Obstacle';
@@ -39,40 +41,40 @@ if (isMac) {
 let x = 0;
 let speed = 5;
 
-let back_trees = new TilingSprite(Texture.from('../assets/forrest/back-trees1.png'), 1300, 500)
-let middle_trees = new TilingSprite(Texture.from('../assets/forrest/middle-trees.png'), 1300, 500)
+let back_trees = new TilingSprite(Texture.from('../assets/background/Background.png'), 1000, 300)
+let middle_trees = new TilingSprite(Texture.from('../assets/background/Middleground.png'), 1000, 250)
 let front_trees = new TilingSprite(Texture.from('../assets/forrest/front-trees.png'), 1300, 500)
-let ground = new TilingSprite(Texture.from('../assets/forrest/ground.png'), 1000, 150)
+let ground = new TilingSprite(Texture.from('../assets/background/Foreground.png'), 1000, 150)
 
 let frame = Sprite.from('../assets/frame.png');
-frame.scale.set(1.28)
+frame.scale.set(1.35)
 // frame.width = window.innerWidth
 // frame.height = window.innerHeight
 
-back_trees.tileScale.x = isMac ? 3.5 : 2.7 
-back_trees.tileScale.y = isMac ? 3.5 : 3.5
-back_trees.position.set(100, 120)
+back_trees.tileScale.x =  0.4 
+back_trees.tileScale.y =  0.4
+back_trees.position.set(300, 180)
 
-middle_trees.tileScale.x = isMac ? 3.5 : 3 
-middle_trees.tileScale.y = isMac ? 3.3 : 3
-middle_trees.position.set(100, 120)
+middle_trees.tileScale.x =  0.4 
+middle_trees.tileScale.y =  0.4
+middle_trees.position.set(300, 360)
 
 // front_trees.tileScale.set(2,2.7)
-front_trees.tileScale.x = isMac ? 2 : 2 
-front_trees.tileScale.y = isMac ? 2.7 : 2.7
+front_trees.tileScale.x =  2 
+front_trees.tileScale.y =  2.7
 front_trees.position.set(100,120)
 
 // ground.tileScale.set(1,1.5)
-ground.tileScale.x = isMac ? 1 : 1
-ground.tileScale.y = isMac ? 1.5 : 1.5
-ground.position.set(300, isMac ? 470 : 490)
+ground.tileScale.x =  1
+ground.tileScale.y =  1.5
+ground.position.set(300, 520)
 // const sceny: Scene = new Scene(app.screen.width, app.screen.height);
 
 
 // app.stage.addChild(sceny);
 app.stage.addChild(back_trees);
 app.stage.addChild(middle_trees);
-app.stage.addChild(front_trees);
+// app.stage.addChild(front_trees);
 app.stage.addChild(ground);
 
 const playerTexture = AnimatedSprite.from('../assets/bird1.png')
@@ -85,35 +87,86 @@ const player = new Player(app, animation);
 let start = true
 
 const startText = new Text('Pixi - Bird')
-startText.style = new TextStyle({
-	fontFamily: 'CustomFont', fontSize: 70, fill: 0xFFFFFF 
-})
-startText.x = isMac ? 600 : 600;
-startText.y = isMac ? 300 : 300;
-app.stage.addChild(startText)
-
-app.stage.addChild(frame);
-// const explosion = new Explosion(app);
-
-app.ticker.add((delta) => {
-	x = (x + speed)
-	front_trees.tilePosition.x = - x
-	ground.tilePosition.x = - x
-	middle_trees.tilePosition.x =  - x / 2 
-	back_trees.tilePosition.x =  - x / 3
+const startTextSpace = new Text('Hit Space to Start')
+const loader =  Assets.load("../assets/CustomFont.ttf");
+loader.then(() => {
+	startText.style = new TextStyle({
+		fontFamily: 'CustomFont', fontSize: 100, fill: 0xFFFFFF 
+	})
+	startText.anchor.set(0.5);
+	startText.x =  750;
+	startText.y =  350;
+	app.stage.addChild(startText)
 	
-	document.addEventListener("keydown", (event) => {
-		if(event.code === 'Space'){
-			if(start){
-				start = false
-				if(!start){
-					const star = new Star(app, player)
-					const obstacle = new Obstacle(app, player, star);
-					
-					app.stage.removeChild(startText)
+	startTextSpace.style = new TextStyle({
+		fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF 
+	})
+	startTextSpace.anchor.set(0.5);
+	startTextSpace.x =  750;
+	startTextSpace.y =  420;
+	app.stage.addChild(startTextSpace)
+
+	const sound = Sound.from("../assets/gameSound.mp3");
+    sound.loop = true
+	sound.volume = 0.3
+	sound.play()
+})
+
+TweenMax.fromTo(startText.scale, 1.5 , 
+	{x: 0, y: 0},
+	{x: 1.1, y: 1.1,
+		ease: Power0.easeNone,
+		repeat: 0,
+		yoyo: true,
+		// 	onComplete: () => {
+	// 	app.stage.addChild(startTextSpace)
+	// 	TweenMax.fromTo(startTextSpace.scale, 1,
+	// 		{x: 0, y: 0},
+	// 		{x: 1.1, y: 1.1,},
+	// 	)
+	// }
+})
+
+TweenMax.fromTo(startTextSpace.scale, 1.5 , 
+	{x: 0, y: 0},
+	{x: 1.1, y: 1.1,
+		ease: Power0.easeNone,
+		repeat: 0,
+		yoyo: true,
+	})
+	
+	app.stage.addChild(frame);
+	// const explosion = new Explosion(app);
+document.addEventListener("keydown", (event) => {
+	if(event.code === 'Space'){
+		if(start){
+			start = false
+			if(!start){
+				const star = new Star(app, player)
+				const obstacle = new Obstacle(app, player, star);
+				
+				TweenMax.fromTo([startTextSpace.scale, startText.scale], 1.5 , 
+					{x: 1.1, y: 1.1},
+					{x: 0, y: 0,
+						ease: Power0.easeNone,
+						repeat: 0,
+						yoyo: true,
+						onComplete: () => {
+							app.stage.removeChild(startText)
+							app.stage.removeChild(startTextSpace)
+
+						}
+					})
 				}
 			}
 		}
 	})
+	
+app.ticker.add((delta) => {
+	x = (x + speed)
+	front_trees.tilePosition.x = - x
+	ground.tilePosition.x = - x
+	middle_trees.tilePosition.x =  - x / 3 
+	back_trees.tilePosition.x =  - x / 4
 	
 })

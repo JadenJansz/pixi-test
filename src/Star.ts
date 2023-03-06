@@ -1,6 +1,7 @@
 import { Application, Text, ICanvas, Rectangle, Sprite } from "pixi.js";
 import { Player } from "./Player";
 import { TweenMax, Power0 } from 'gsap'
+import { sound } from '@pixi/sound'
 import { isMac } from ".";
 
 export class Star extends Sprite {
@@ -18,8 +19,11 @@ export class Star extends Sprite {
         this.update(app)
 
         this.scoreLabel = new Text('Score : 00', { fontFamily: 'CustomFont', fontSize: 35, fill: 0xFFFFFF })
-        this.scoreLabel.x = isMac ? 320 : 350;
-        this.scoreLabel.y = isMac ? 140 : 140;
+        this.scoreLabel.x = 340;
+        this.scoreLabel.y = 150;
+
+        sound.add("success", "../assets/success.mp3");
+        sound.volume("success",0.3)
     
         app.stage.addChild(this.scoreLabel)
 
@@ -27,7 +31,7 @@ export class Star extends Sprite {
     
     addStar(app: Application<ICanvas>){
         const star = Sprite.from('../assets/star.png')
-        star.position.set(1100, Math.random() * ((isMac ? 450 : 440 )- (isMac ? 140 : 150)) + (isMac ? 140 : 150))
+        star.position.set(1200, Math.random() * (440 - 150) + 150)
         star.scale.x = 0.6
         star.scale.y = 0.6
         star.interactive = true;
@@ -69,8 +73,9 @@ export class Star extends Sprite {
                 }
                 
                 if(this.player.bounds.getBounds().intersects(star.getBounds())){
+                    sound.play("success");
                     this.score += 10;
-                    this.scoreLabel.text = `Score: ${this.score}`;
+                    this.scoreLabel.text = `Score : ${this.score}`;
                     app.stage.removeChild(star);
                     this.stars.splice(this.stars.indexOf(star), 1)
 
