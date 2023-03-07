@@ -30,9 +30,7 @@ export class Explosion extends Container {
         animation.onComplete = () => {
             animation.destroy();
         }
-        animation.onFrameChange = this.onClampyFrameChange.bind(this);
 
-        console.log("lol")
     }
 
     playerDead(x: number | undefined, y: number | undefined){
@@ -60,17 +58,10 @@ export class Explosion extends Container {
             const restartText = new Text('Press Space to restart')
             
             restartText.style = new TextStyle({
-                fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF 
+                fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF, stroke: "black", strokeThickness: 4
             })
             restartText.x = 620;
             restartText.y = 380;
-            // this.app.stage.addChild(restartText)
-            // app.ticker.stop()
-            // this.restart();
         }
-    }
-    
-    onClampyFrameChange(currentFrame: any): void {
-        // console.log("Clampy's current frame is", currentFrame);
     }
 }

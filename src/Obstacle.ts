@@ -1,6 +1,4 @@
 import { Application, ICanvas, Rectangle, Sprite, Text, TextStyle } from "pixi.js";
-import { Loader } from "pixi.js";
-import { isMac } from ".";
 import { Explosion } from "./Explosion";
 import { Player } from "./Player";
 import { Star } from "./Star";
@@ -28,11 +26,10 @@ export class Obstacle extends Sprite {
     addObstacle(app: Application<ICanvas>){
         const obstacle = Sprite.from('../assets/bomb.png');
         obstacle.position.set(1200, Math.random() * (440 - 150) + 150)
-        obstacle.scale.x = 0.7
-        obstacle.scale.y = 0.7
+        obstacle.scale.x = 0.45
+        obstacle.scale.y = 0.45
         obstacle.interactive = true;
         obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, obstacle.width, obstacle.height);
-        // obstacle.x -= -5;
         
         app.stage.addChildAt(obstacle, 5);
         this.obstacles.push(obstacle);
@@ -41,19 +38,16 @@ export class Obstacle extends Sprite {
     update(app: Application<ICanvas>){
         app.ticker.add(() => {
             if (this.interval % 80 === 0) {
-                // console.log(Math.round(this.interval))
                 this.addObstacle(app);
             }
             this.obstacles.forEach((obstacle) => {
                 obstacle.position.x += - this.velocity;
 
-                // console.log(this.player.getBounds())
                 if(this.player.bounds.getBounds().intersects(obstacle.getBounds())){
-                    // app.stage.removeChild(this.player);
                     const gameOverText = new Text('Game Over !!')
                     
                     gameOverText.style = new TextStyle({
-                        fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF 
+                        fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF, stroke: "black", strokeThickness: 4
                     })
                     gameOverText.x = 600;
                     gameOverText.y = 300;
@@ -65,16 +59,13 @@ export class Obstacle extends Sprite {
                         this.animation = true
                         const explosion = new Explosion(app, obstacle.x, obstacle.y)
                         
-                        // explosion.playerDead(this.player.bounds.x, this.player.bounds.y); 
                         setTimeout(() => {
                             app.ticker.stop();
                         }, 1500)
                     }
 
                     app.stage.addChild(gameOverText)
-                    // console.log(this.player.getBounds())
                     app.stage.removeChild(obstacle);
-                    // app.ticker.stop();
 
                 }
 
@@ -90,24 +81,6 @@ export class Obstacle extends Sprite {
             })
             this.interval += 1
         })
-    }
-
-    addScore(){ 
-
-    }
-
-    
-    rectsIntersect(a: Sprite, b: Sprite){
-	
-        let playerBox = a.getBounds();
-        let obstacleBox = b.getBounds();
-
-        // console.log(playerBox)
-    
-        return playerBox.x + playerBox.width > obstacleBox.x &&
-                playerBox.x < obstacleBox.x + obstacleBox.width &&
-                playerBox.y + playerBox.height > obstacleBox.y &&
-                playerBox.y < obstacleBox.y + obstacleBox.height
     }
 
 }

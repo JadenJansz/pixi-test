@@ -18,7 +18,7 @@ export class Star extends Sprite {
         this.player = player
         this.update(app)
 
-        this.scoreLabel = new Text('Score : 00', { fontFamily: 'CustomFont', fontSize: 35, fill: 0xFFFFFF })
+        this.scoreLabel = new Text('Score : 00', { fontFamily: 'CustomFont', fontSize: 35, fill: 0x00000 })
         this.scoreLabel.x = 340;
         this.scoreLabel.y = 150;
 
@@ -32,15 +32,14 @@ export class Star extends Sprite {
     addStar(app: Application<ICanvas>){
         const star = Sprite.from('../assets/star.png')
         star.position.set(1200, Math.random() * (440 - 150) + 150)
-        star.scale.x = 0.6
-        star.scale.y = 0.6
+        star.scale.x = 0.4
+        star.scale.y = 0.4
         star.interactive = true;
         star.hitArea = new Rectangle(1,1, 1, 1);
-        // star.x -= -5;
         
         TweenMax.to(star.scale, 1, {
-            x: 0.9,
-            y: 0.9, 
+            x: 0.5,
+            y: 0.5, 
             ease: Power0.easeNone,
             repeat: -1,
             yoyo: true
@@ -53,18 +52,11 @@ export class Star extends Sprite {
     update(app: Application<ICanvas>){
         app.ticker.add(() => {
             if (this.interval % 60 === 0) {
-                // console.log(Math.round(this.interval))
                 this.addStar(app);
             }
             
             this.stars.forEach((star) => {
                 star.position.x += - this.velocity;
-
-                // if(this.rectsIntersect(this.player, star)){
-                //     console.log("Erorrrrrr")
-                //     app.stage.removeChild(star);
-                //     this.stars.splice(this.stars.indexOf(star), 1)
-                // }
 
                 if(star.position.x < -star.width){
                     app.stage.removeChild(star);
@@ -80,21 +72,12 @@ export class Star extends Sprite {
                     this.stars.splice(this.stars.indexOf(star), 1)
 
                 }
+
+                if(this.player.end){
+                    app.stage.removeChild(star)
+                }
             })
             this.interval += 1
         })
-    }
-
-    rectsIntersect(a: Sprite, b: Sprite){  
-	
-        let playerBox = a.getBounds();
-        let obstacleBox = b.getBounds();
-
-        // console.log(playerBox)
-    
-        return playerBox.x + playerBox.width > obstacleBox.x &&
-                playerBox.x < obstacleBox.x + obstacleBox.width &&
-                playerBox.y + playerBox.height > obstacleBox.y &&
-                playerBox.y < obstacleBox.y + obstacleBox.height
     }
 }

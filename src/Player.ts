@@ -11,7 +11,8 @@ export class Player extends Container {
     start = false;
     end = false;
     rotationSpeed = 0.1;
-    bounds: AnimatedSprite
+    bounds: AnimatedSprite;
+    textDisplayed: boolean = false;
 
     constructor(app: Application<ICanvas>, texture: AnimatedSprite) {
         super();
@@ -77,26 +78,8 @@ export class Player extends Container {
                 // player.vy = 0;
                 if(player.y > worldBounds.y){
                     this.playFrames(player, ["assets/bird/step5.png", "assets/bird/step6.png"], 1000, false)
-                    const gameOverText = new Text('Game Over !!')
-                        
-                    gameOverText.style = new TextStyle({
-                        fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF 
-                    })
-                    gameOverText.x = 600;
-                    gameOverText.y = 300;
-                    app.stage.addChild(gameOverText)
-                    const restartText = new Text('Press Space to restart')    
-                    restartText.style = new TextStyle({
-                        fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF 
-                    })
-                    restartText.x = 620;
-                    restartText.y = 380;
-                    app.stage.addChild(restartText)
-                    this.restart(app);
-                    setTimeout(() => {
-                        app.ticker.stop();
-                    }, 500)
-                    return
+                    
+                    this.displayText(app)
                 }
 
             }
@@ -128,5 +111,32 @@ export class Player extends Container {
         sprite.animationSpeed = -1 / duration;
         sprite.loop = loop;
         sprite.play();
+    }
+
+    displayText(app: Application<ICanvas>){
+
+        if(!this.textDisplayed){
+            this.textDisplayed = true
+            const gameOverText = new Text('Game Over !!')
+                            
+            gameOverText.style = new TextStyle({
+                fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF, stroke: "black", strokeThickness: 4
+            })
+            gameOverText.x = 600;
+            gameOverText.y = 300;
+            app.stage.addChild(gameOverText)
+            const restartText = new Text('Hit Space to restart')    
+            restartText.style = new TextStyle({
+                fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF, stroke: "black", strokeThickness: 4
+            })
+            
+            restartText.x = 640;
+            restartText.y = 380;
+            app.stage.addChild(restartText)
+            this.restart(app);
+            setTimeout(() => {
+                app.ticker.stop();
+            }, 500)
+        }
     }
 }
