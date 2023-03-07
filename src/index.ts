@@ -2,13 +2,9 @@ import { Sound } from '@pixi/sound';
 import { Power0, TweenMax } from 'gsap';
 import { Application, Sprite, Texture, Text, TextStyle, AnimatedSprite, Loader, Assets } from 'pixi.js'
 import { TilingSprite } from 'pixi.js';
-import { Explosion } from './Explosion';
 import { Obstacle } from './Obstacle';
 import { Player } from './Player';
 import { Star } from './Star';
-
-const maxWidth = 1250;
-const maxHeight = 700;
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -19,7 +15,7 @@ const app = new Application({
 	height: window.innerHeight
 });
 
-console.log(window.innerWidth, window.innerHeight)
+export let BigS = false
 
 window.addEventListener('resize', () => {
 	const width = window.innerWidth;
@@ -27,58 +23,51 @@ window.addEventListener('resize', () => {
 	const ratio = Math.min(width / app.renderer.width, height / app.renderer.height);
 	app.view.style!.width = `${app.renderer.width * ratio}px`;
 	app.view.style!.height = `${app.renderer.height * ratio}px`;
+
 });
 
-export const isMac = navigator.userAgent.indexOf('Mac OS X') !== -1;
-
-if (isMac) {
-  console.log("MAC")
-} else {
-	console.log("Windows")
+if(window.innerWidth > 1600 && window.innerHeight > 900){
+	BigS = true
+}else{
+	BigS = false
 }
+
 
 let x = 0;
 let speed = 5;
 
-let sky = new TilingSprite(Texture.from('../assets/background/Sky.png'), 1000, 400)
-let back_trees = new TilingSprite(Texture.from('../assets/background/Background.png'), 1000, 300)
-let middle_trees = new TilingSprite(Texture.from('../assets/background/Middleground.png'), 1000, 250)
+let sky = new TilingSprite(Texture.from('../assets/background/Sky.png'),BigS ? 1100 : 1000, 400)
+let mountains = new TilingSprite(Texture.from('../assets/background/Background.png'), BigS ? 1100 : 1000, 300)
+let middle = new TilingSprite(Texture.from('../assets/background/Middleground.png'), BigS ? 1100 : 1000, 250)
 let front_trees = new TilingSprite(Texture.from('../assets/forrest/front-trees.png'), 1300, 500)
-let ground = new TilingSprite(Texture.from('../assets/background/Foreground.png'), 1000, 150)
+let ground = new TilingSprite(Texture.from('../assets/background/Foreground.png'), BigS ? 1100 : 1000, 150)
 
-let frame = Sprite.from('../assets/frame1.png');
-frame.scale.set(1.35)
-// frame.width = window.innerWidth
-// frame.height = window.innerHeight
+let frame = Sprite.from('../assets/frame.png');
+frame.scale.set(BigS ? 1.75 : 1.4)
 
 sky.tileScale.x =  0.4 
 sky.tileScale.y =  0.4
-sky.position.set(300, 130)
+sky.position.set(BigS ? 400 : 300, BigS ? 180 : 130)
 
-back_trees.tileScale.x =  0.4 
-back_trees.tileScale.y =  0.4
-back_trees.position.set(300, 180)
+mountains.tileScale.x =  0.4 
+mountains.tileScale.y =  0.4
+mountains.position.set(BigS ? 400 :300, BigS ? 300 : 180)
 
-middle_trees.tileScale.x =  0.4 
-middle_trees.tileScale.y =  0.4
-middle_trees.position.set(300, 360)
+middle.tileScale.x =  0.4 
+middle.tileScale.y =  0.4
+middle.position.set(BigS ? 400 :300, BigS ? 460 : 360)
 
-// front_trees.tileScale.set(2,2.7)
 front_trees.tileScale.x =  2 
 front_trees.tileScale.y =  2.7
 front_trees.position.set(100,120)
 
-// ground.tileScale.set(1,1.5)
 ground.tileScale.x =  1
 ground.tileScale.y =  1.5
-ground.position.set(300, 520)
-// const sceny: Scene = new Scene(app.screen.width, app.screen.height);
+ground.position.set(BigS ? 400 :300,BigS ? 650 : 520)
 
-
-// app.stage.addChild(sceny);
 app.stage.addChild(sky);
-app.stage.addChild(back_trees);
-app.stage.addChild(middle_trees);
+app.stage.addChild(mountains);
+app.stage.addChild(middle);
 app.stage.addChild(ground);
 
 const birdFrames = ["assets/bird/step1.png", "assets/bird/step2.png", "assets/bird/step3.png", "assets/bird/step4.png"];
@@ -90,26 +79,20 @@ let start = true
 
 const startText = Sprite.from("../assets/pixi-bird.png")
 startText.anchor.set(0.5)
-startText.x = 750
-startText.y = 330
+startText.x = BigS ? 940 : 750
+startText.y = BigS ? 400 : 330
 const startTextSpace = new Text('Hit Space to Start')
 const loader =  Assets.load(["../assets/CustomFont.ttf", "../assets/explosion/Layer1.png", "../assets/explosion/Layer2.png", "../assets/explosion/Layer3.png", "../assets/explosion/Layer4.png", "../assets/explosion/Layer5.png", "../assets/explosion/Layer6.png"]);
 
 loader.then(() => {
-	// startText.style = new TextStyle({
-	// 	fontFamily: 'CustomFont', fontSize: 100, fill: 0xFFFFFF 
-	// })
-	// startText.anchor.set(0.5);
-	// startText.x =  750;
-	// startText.y =  350;
 	app.stage.addChild(startText)
 	
 	startTextSpace.style = new TextStyle({
 		fontFamily: 'CustomFont', fontSize: 40, fill: 0xFFFFFF,  stroke: "black", strokeThickness: 3
 	})
 	startTextSpace.anchor.set(0.5);
-	startTextSpace.x =  750;
-	startTextSpace.y =  420;
+	startTextSpace.x = BigS ? 930 : 750;
+	startTextSpace.y = BigS ? 500 : 420;
 	app.stage.addChild(startTextSpace)
 
 	const sound = Sound.from("../assets/gameSound.mp3");
@@ -181,8 +164,8 @@ function loadScene() {
 	sky.tilePosition.x = - x / 10
 	front_trees.tilePosition.x = - x
 	ground.tilePosition.x = - x
-	middle_trees.tilePosition.x =  - x / 3 
-	back_trees.tilePosition.x =  - x / 4
+	middle.tilePosition.x =  - x / 3 
+	mountains.tilePosition.x =  - x / 4
 	
 	})
 	

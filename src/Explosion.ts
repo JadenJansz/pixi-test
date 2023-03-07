@@ -1,6 +1,6 @@
 import { AnimatedSprite, Application, Container, ICanvas, Texture, Text, TextStyle, Rectangle } from "pixi.js";
 import { TweenMax, Power0 } from 'gsap'
-import { isMac } from ".";
+import { BigS } from ".";
 
 export class Explosion extends Container {
 
@@ -49,10 +49,8 @@ export class Explosion extends Container {
         animation.animationSpeed = 0.07
 
         animation.rotation += this.rotationSpeed
-                // console.log(player.y + player.height)
         const worldBounds = new Rectangle(0, 160, 1250, 360)
         if(!worldBounds.contains(animation.x, animation.y)){
-            // this.start = false
             animation.y -= 2
             
             const restartText = new Text('Press Space to restart')

@@ -2,7 +2,7 @@ import { Application, Text, ICanvas, Rectangle, Sprite } from "pixi.js";
 import { Player } from "./Player";
 import { TweenMax, Power0 } from 'gsap'
 import { sound } from '@pixi/sound'
-import { isMac } from ".";
+import { BigS } from ".";
 
 export class Star extends Sprite {
 
@@ -19,8 +19,8 @@ export class Star extends Sprite {
         this.update(app)
 
         this.scoreLabel = new Text('Score : 00', { fontFamily: 'CustomFont', fontSize: 35, fill: 0x00000 })
-        this.scoreLabel.x = 340;
-        this.scoreLabel.y = 150;
+        this.scoreLabel.x = BigS ? 430 : 340;
+        this.scoreLabel.y = BigS ? 200 : 150;
 
         sound.add("success", "../assets/success.mp3");
         sound.volume("success",0.3)
@@ -31,15 +31,15 @@ export class Star extends Sprite {
     
     addStar(app: Application<ICanvas>){
         const star = Sprite.from('../assets/star.png')
-        star.position.set(1200, Math.random() * (440 - 150) + 150)
-        star.scale.x = 0.4
-        star.scale.y = 0.4
+        star.position.set(BigS ? 1600 : 1200, Math.random() * ((BigS ? 550 : 440) - (BigS ? 190 : 150)) + 210)
+        star.scale.x = BigS ? 0.5 : 0.4
+        star.scale.y = BigS ? 0.5 : 0.4
         star.interactive = true;
         star.hitArea = new Rectangle(1,1, 1, 1);
         
         TweenMax.to(star.scale, 1, {
-            x: 0.5,
-            y: 0.5, 
+            x: 0.6,
+            y: 0.6, 
             ease: Power0.easeNone,
             repeat: -1,
             yoyo: true

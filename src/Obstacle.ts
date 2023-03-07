@@ -1,4 +1,5 @@
 import { Application, ICanvas, Rectangle, Sprite, Text, TextStyle } from "pixi.js";
+import { BigS } from ".";
 import { Explosion } from "./Explosion";
 import { Player } from "./Player";
 import { Star } from "./Star";
@@ -18,16 +19,14 @@ export class Obstacle extends Sprite {
         this.player = player
         this.star = star
         this.update(app)
-        
-        console.log(player.getBounds())
     }
     
     
     addObstacle(app: Application<ICanvas>){
         const obstacle = Sprite.from('../assets/bomb.png');
-        obstacle.position.set(1200, Math.random() * (440 - 150) + 150)
-        obstacle.scale.x = 0.45
-        obstacle.scale.y = 0.45
+        obstacle.position.set(BigS ? 1600 : 1200, Math.random() * ((BigS ? 550 : 440) - (BigS ? 190 : 150)) + 210)
+        obstacle.scale.x = BigS ? 0.5 : 0.45
+        obstacle.scale.y = BigS ? 0.5 : 0.45
         obstacle.interactive = true;
         obstacle.hitArea = new Rectangle(-obstacle.width / 2, -obstacle.height / 2, obstacle.width, obstacle.height);
         
@@ -49,8 +48,8 @@ export class Obstacle extends Sprite {
                     gameOverText.style = new TextStyle({
                         fontFamily: 'CustomFont', fontSize: 90, fill: 0xFFFFFF, stroke: "black", strokeThickness: 4
                     })
-                    gameOverText.x = 600;
-                    gameOverText.y = 300;
+                    gameOverText.x = BigS ? 800 : 600;
+                    gameOverText.y = BigS ? 400 : 300;
 
 
                     this.player.end = true
@@ -64,13 +63,8 @@ export class Obstacle extends Sprite {
                         }, 1500)
                     }
 
-                    app.stage.addChild(gameOverText)
+                    app.stage.addChild(gameOverText);
                     app.stage.removeChild(obstacle);
-
-                }
-
-
-                if(this.star.getBounds().intersects(obstacle.getBounds())){
 
                 }
 
